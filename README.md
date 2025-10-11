@@ -1,6 +1,6 @@
 # The Wealth of Health: Exploring the Link Between Healthcare Systems and National Prosperity
 
-“Healthy nations are wealthy nations — exploring how economics and healthcare intertwine.”
+Healthy nations are wealthy nations — exploring how economics and healthcare intertwine.
 
 ## Overview
 This project investigates how the **quality and strength of a nation's healthcare system** relate to its **economic prosperity** and **overall quality of life**.  
@@ -13,7 +13,7 @@ The goal is to uncover patterns showing whether nations with **stronger economie
 - Examine global patterns in healthcare investment and outcomes.
 - Analyze correlations between **GDP per capita**, **healthcare spending**, and **health outcomes** (life expectancy, mortality rates).
 - Visualize differences between countries and regions.
-- (Bonus) Build an interactive dashboard for exploring healthcare and economic data over time.
+- Build an interactive dashboard for exploring healthcare and economic data over time.
 
 ## Data Source
 All data for this project is obtained from the **World Bank Open Data portal**.  
