@@ -1,5 +1,7 @@
 # The Wealth of Health: Exploring the Link Between Healthcare Systems and National Prosperity
 
+“Healthy nations are wealthy nations — exploring how economics and healthcare intertwine.”
+
 ## Overview
 This project investigates how the **quality and strength of a nation's healthcare system** relate to its **economic prosperity** and **overall quality of life**.  
 
