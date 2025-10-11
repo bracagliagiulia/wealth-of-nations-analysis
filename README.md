@@ -34,10 +34,6 @@ The project focuses on these key indicators:
 | **Mortality** | Infant mortality rate (per 1,000 live births) | `SP.DYN.IMRT.IN` |
 | **Population** | Total population | `SP.POP.TOTL` |
 
-git add README.md
-git commit -m "Add data source and key indicators to README"
-git push origin main
-
 
 
 
