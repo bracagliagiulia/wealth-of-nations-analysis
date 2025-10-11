@@ -1,2 +1,9 @@
-# wealth-of-nations-analysis
-Exploring the relationship between economic prosperity and population well-being using World Bank data.
+# The Wealth of Health: Exploring the Link Between Healthcare Systems and National Prosperity
+
+## Overview
+This project investigates how the **quality and strength of a nation's healthcare system** relate to its **economic prosperity** and **overall quality of life**.  
+
+Using data from the **World Bank Open Data portal**, the analysis explores how indicators such as **healthcare expenditure**, **life expectancy**, **infant mortality**, and **GDP per capita** interact across different countries and over time.  
+
+The goal is to uncover patterns showing whether nations with **stronger economies** tend to build **higher-quality healthcare systems**, and how that translates into **better population health and longevity**.
+
