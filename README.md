@@ -15,4 +15,29 @@ The goal is to uncover patterns showing whether nations with **stronger economie
 - Visualize differences between countries and regions.
 - (Bonus) Build an interactive dashboard for exploring healthcare and economic data over time.
 
+## Data Source
+All data for this project is obtained from the **World Bank Open Data portal**.  
+The project uses historical data covering economic, healthcare, and population indicators for countries around the world.
+
+Data is accessed via the **Python package `world_bank_data`**:
+- World Bank Open Data: [https://data.worldbank.org/](https://data.worldbank.org/)
+- Python package documentation: [https://pypi.org/project/world-bank-data/](https://pypi.org/project/world-bank-data/)
+
+## Indicators to Analyze
+The project focuses on these key indicators:
+
+| Category | Indicator | World Bank Code |
+|----------|-----------|----------------|
+| **Economic** | GDP per capita (current US$) | `NY.GDP.PCAP.CD` |
+| **Healthcare Spending** | Health expenditure (% of GDP) | `SH.XPD.CHEX.GD.ZS` |
+| **Health Outcomes** | Life expectancy at birth (years) | `SP.DYN.LE00.IN` |
+| **Mortality** | Infant mortality rate (per 1,000 live births) | `SP.DYN.IMRT.IN` |
+| **Population** | Total population | `SP.POP.TOTL` |
+
+git add README.md
+git commit -m "Add data source and key indicators to README"
+git push origin main
+
+
+
 
