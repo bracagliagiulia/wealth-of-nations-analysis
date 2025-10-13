@@ -1,29 +1,25 @@
 # wealth-of-nations-analysis
-
-Exploring the relationship between economic prosperity and population well-being using World Bank data.
+Exploring economic and healthcare indicators using basic Python code.
 
 ## Overview
-This project investigates how a country's economic indicators, such as GDP per capita, relate to population well-being.  
-We use a CSV file containing data for multiple countries and apply basic Python techniques to analyze it.
+This project analyzes GDP per capita, healthcare spending, life expectancy, infant mortality, and population using basic Python. 
 
 ## Objectives
-- Load and read data from a CSV file using basic Python.
-- Identify missing data in the dataset.
-- Calculate simple statistics, like average GDP per capita.
-- Visualize data using simple plots with `matplotlib`.
+- Examine global patterns in healthcare and economics.
+- Analyze correlations between GDP, healthcare spending, and health outcomes.
+- Create basic plots to visualize patterns.
 
 ## Data Source
-All data is stored in the CSV file `worldbank_healthcare_data.csv` located in the `data` folder.
+Data comes from the World Bank Open Data portal in CSV format.
 
-## Python Libraries Used
-- `matplotlib` (for plotting)
-- No advanced libraries are used in this version.
-
-## Analysis
-- Read the CSV file line by line.
-- Count rows with missing data.
-- Calculate average GDP per capita.
-- Plot the first 50 countries' GDP using a simple line chart.
+## Indicators
+| Category | Indicator | Code |
+|----------|-----------|------|
+| Economic | GDP per capita | NY.GDP.PCAP.CD |
+| Healthcare | Health expenditure | SH.XPD.CHEX.GD.ZS |
+| Health outcomes | Life expectancy | SP.DYN.LE00.IN |
+| Mortality | Infant mortality | SP.DYN.IMRT.IN |
+| Population | Total population | SP.POP.TOTL |
 
 
 
