@@ -26,13 +26,13 @@ All data comes from the **World Bank Open Data portal** in CSV format. The datas
 | Population | Total population | SP.POP.TOTL |
 
 ## Project Structure
-wealth-of-nations-analysis/
-├── README.md # Project overview and instructions
-├── data/ # CSV files from World Bank
-│ └── worldbank_healthcare_data.csv
-├── notebook/ # Jupyter Notebook for exploration
-│ └── explore_healthcare_vs_economy.ipynb
-└── requirements.txt # Python packages needed
+wealth-of-nations-analysis/ >>
+  README.md # Project overview and instructions
+  data/ # CSV files from World Bank >>
+    worldbank_healthcare_data.csv
+  notebook/ # Jupyter Notebook for exploration >>
+    explore_healthcare_vs_economy.ipynb
+  requirements.txt # Python packages needed
 
 ### Key Points
 - The **data folder** stores CSV files used in the analysis.
