@@ -38,14 +38,85 @@ The dataset includes multiple health and economic indicators for countries world
 
 ## Project Structure
 
-wealth-of-nations-analysis/
-│
-├── README.md
-│
-├── data/
-│ └── worldbank_healthcare_data.csv
-│
-├── notebook/
-│ └── explore_healthcare_vs_economy.ipynb
-│
-└── requirements.txt
+wealth-of-nations-analysis/  
+│  
+├── README.md  
+├── data/  
+│   └── worldbank_healthcare_data.csv  
+├── notebook/  
+│   └── explore_healthcare_vs_economy.ipynb  
+├── outputs/  
+│   └── gdp_life_expectancy_cleaned.csv  
+└── requirements.txt  
+
+---
+
+## Analysis Steps
+
+1. **Load and inspect data:**  
+   - Read CSV into Python and check headers and sample rows.  
+
+2. **Data Cleaning:**  
+   - Remove rows with missing or invalid GDP and Life Expectancy values.  
+   - Align datasets for valid country-year entries.  
+
+3. **Descriptive Statistics:**  
+   - Average GDP per capita  
+   - Countries above/below average GDP  
+   - Maximum and minimum GDP per capita  
+   - Average, maximum, and minimum healthcare expenditure  
+
+4. **Visualizations:**  
+   - Line plots for GDP trends  
+   - Scatter plots:  
+     - GDP vs Life Expectancy  
+     - Healthcare Expenditure vs Life Expectancy  
+   - Histograms for GDP distribution  
+   - Scatter plots with correlation annotations  
+   - Time trends for selected countries  
+
+5. **Correlation Analysis:**  
+   - Pearson correlation coefficients between:  
+     - GDP vs Life Expectancy  
+     - GDP vs Healthcare Expenditure  
+     - Life Expectancy vs Healthcare Expenditure  
+
+6. **Export Cleaned Data:**  
+   - Save cleaned GDP and Life Expectancy dataset to `outputs/gdp_life_expectancy_cleaned.csv`  
+
+---
+
+## Key Findings
+
+- **GDP vs Life Expectancy:** Moderate positive correlation; wealthier countries generally have longer life expectancy.  
+- **Healthcare expenditure:** Low correlation with GDP and Life Expectancy globally, indicating efficiency differences.  
+- **Outliers:** Some countries spend a lot but have poor health outcomes, while others achieve good outcomes with modest spending.  
+- **GDP distribution:** Highly skewed with a few countries having extremely high GDP per capita.  
+
+---
+
+## Future Directions
+
+- Analyze correlations **by region** or **income group** to identify regional patterns.  
+- Fit **regression models** to predict Life Expectancy based on GDP and healthcare spending.  
+- Explore **time-series trends** for multiple countries over decades.  
+- Create **color-coded scatter plots** by region or income category.  
+- Investigate **efficiency of healthcare spending** and its impact on health outcomes.  
+
+---
+
+## How to Run
+
+1. Place the CSV dataset in the `data/` folder.  
+2. Run the notebook `explore_healthcare_vs_economy.ipynb` sequentially.  
+3. Use `outputs/gdp_life_expectancy_cleaned.csv` for any additional analyses.  
+
+---
+
+## Tools Used
+
+- Python 3.14  
+- Libraries: `matplotlib`, `numpy`, `csv`  
+- Jupyter Notebook for interactive exploration and plotting  
+
+---
