@@ -1,0 +1,28 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import world_bank_data as wb
+
+| Category                | Indicator                                     | World Bank Code     |
+| ----------------------- | --------------------------------------------- | ------------------- |
+| **Economic**            | GDP per capita (current US$)                  | `NY.GDP.PCAP.CD`    |
+| **Healthcare Spending** | Health expenditure (% of GDP)                 | `SH.XPD.CHEX.GD.ZS` |
+| **Health Outcomes**     | Life expectancy at birth (years)              | `SP.DYN.LE00.IN`    |
+| **Mortality**           | Infant mortality rate (per 1,000 live births) | `SP.DYN.IMRT.IN`    |
+| **Population**          | Total population                              | `SP.POP.TOTL`       |
+
+# List of indicators
+indicators = {
+    'gdp_per_capita': 'NY.GDP.PCAP.CD',
+    'health_exp_gdp': 'SH.XPD.CHEX.GD.ZS',
+    'life_expectancy': 'SP.DYN.LE00.IN',
+    'infant_mortality': 'SP.DYN.IMRT.IN',
+    'population': 'SP.POP.TOTL'
+}
+
+# Load data from World Bank
+data = wb.get_series(indicators, mrv=10, id_or_value='id', simplify_index=True)
+
+# Display first rows
+data.head()
