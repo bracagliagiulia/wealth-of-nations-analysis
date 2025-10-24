@@ -113,6 +113,13 @@ wealth-of-nations-analysis/
 - Investigate **healthcare efficiency metrics** across countries.  
 - Expand dashboard to include other indicators such as **infant mortality** and **population trends**.
 
+ ## Tools Used
+
+- Python 3.14 and Python 3.12
+- Libraries: streamlit, matplotlib, numpy, pandas, csv
+- Jupyter Notebook for static exploration
+- Streamlit for interactive dashboard
+
 ---
 
 ## How to Run 
@@ -125,12 +132,4 @@ wealth-of-nations-analysis/
 .\venv_streamlit\Scripts\Activate.ps1
 streamlit run dashboard.py
 
----
-
-## Tools Used
-
-- Python 3.14 and Python 3.12
-- Libraries: streamlit, matplotlib, numpy, pandas, csv
-- Jupyter Notebook for static exploration
-- Streamlit for interactive dashboard
 ---
