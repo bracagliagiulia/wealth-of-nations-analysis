@@ -113,9 +113,13 @@ wealth-of-nations-analysis/
 - Investigate **healthcare efficiency metrics** across countries.  
 - Expand dashboard to include other indicators such as **infant mortality** and **population trends**.
 
+<<<<<<< HEAD
 ---
 
 ## Tools Used
+=======
+ ## Tools Used
+>>>>>>> 6ae6c72c33d1021de424402096c0a3220c8ad802
 
 - Python 3.14 and Python 3.12
 - Libraries: streamlit, matplotlib, numpy, pandas, csv

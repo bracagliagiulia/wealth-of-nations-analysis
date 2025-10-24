@@ -126,4 +126,8 @@ st.markdown("### 🔍 Summary Statistics")
 st.write(data_filtered[["gdp_per_capita", "life_expectancy"]].describe())
 
 st.markdown("---")
+<<<<<<< HEAD
 st.markdown("Made with ❤️ by Giulia using Streamlit and Python 3.12")
+=======
+st.markdown("Made with ❤️ by Giulia using Streamlit and Python 3.12")
+>>>>>>> 6ae6c72c33d1021de424402096c0a3220c8ad802

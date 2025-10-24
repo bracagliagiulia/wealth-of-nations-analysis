@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 matplotlib==3.9.2
 numpy==2.1.1
 pandas==2.2.3
 streamlit==1.39.0
+=======
+matplotlib==3.9.2
+numpy==2.1.1
+pandas==2.2.3
+streamlit==1.39.0
+>>>>>>> 6ae6c72c33d1021de424402096c0a3220c8ad802
