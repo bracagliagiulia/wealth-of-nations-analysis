@@ -1,38 +1,42 @@
-# librarian/utils.py
-"""Utility functions for loading, cleaning, and saving CSV data."""
+"""
+utils.py
+---------
+Utility functions for data loading and saving.
+"""
 
 from pathlib import Path
 import pandas as pd
+import csv
 
 
 def load_data(filepath: str) -> pd.DataFrame:
     """
-    Load CSV into a pandas DataFrame.
+    Load a CSV dataset into a pandas DataFrame.
+
     Args:
-        filepath: path to CSV file
+        filepath (str): Path to the CSV file.
+
     Returns:
-        pd.DataFrame: raw DataFrame (may contain NaNs)
+        pd.DataFrame: Loaded dataset.
     """
     p = Path(filepath)
     if not p.exists():
         raise FileNotFoundError(f"File not found: {filepath}")
-    df = pd.read_csv(p)
-    return df
+    return pd.read_csv(p)
 
 
 def save_cleaned_data(output_path: str, gdp: list, life: list) -> None:
     """
-    Save two aligned lists (gdp, life) to CSV.
+    Save GDP and life expectancy lists to a CSV file.
+
     Args:
-        output_path: path to save csv
-        gdp: list of GDP values
-        life: list of Life Expectancy values
+        output_path (str): Output file path.
+        gdp (list): GDP per capita values.
+        life (list): Life expectancy values.
     """
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
-    import csv
     with out.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["gdp_per_capita", "life_expectancy"])
-        for gd, lf in zip(gdp, life):
-            writer.writerow([gd, lf])
+        writer.writerows(zip(gdp, life))

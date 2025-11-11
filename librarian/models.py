@@ -1,5 +1,8 @@
-# librarian/models.py
-"""Simple data classes for the project."""
+"""
+models.py
+----------
+Simple dataclasses used to represent records in the project.
+"""
 
 from dataclasses import dataclass
 from typing import Optional
