@@ -111,21 +111,7 @@ wealth-of-nations-analysis/
 - Extend analysis to **income groups or regions**.  
 - Add **interactive filtering** and **time-series exploration** in Streamlit.  
 - Investigate **healthcare efficiency metrics** across countries.  
-- Expand dashboard to include other indicators such as **infant mortality** and **population trends**.
-
-<<<<<<< HEAD
----
-
-## Tools Used
-=======
- ## Tools Used
->>>>>>> 6ae6c72c33d1021de424402096c0a3220c8ad802
-
-- Python 3.14 and Python 3.12
-- Libraries: streamlit, matplotlib, numpy, pandas, csv
-- Jupyter Notebook for static exploration
-- Streamlit for interactive dashboard
-
+- Expand dashboard to include other indicators such as **infant mortality** and **population trends**.--
 ---
 
 ## How to Run 
