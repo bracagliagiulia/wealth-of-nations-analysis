@@ -12,6 +12,25 @@ The analysis includes both static visualizations in Jupyter Notebook and an inte
 
 ---
 
+## Quickstart
+
+```bash
+# 1) Create & activate a virtual environment
+python -m venv .venv
+# Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
+# macOS/Linux:
+# source .venv/bin/activate
+
+# 2) Install dependencies
+pip install -r requirements.txt
+
+# 3) Run the notebook
+jupyter lab  # or jupyter notebook
+
+# 4) Run the Streamlit dashboard
+streamlit run dashboard.py
+
 ## Objectives
 
 - Examine global patterns in healthcare and economics.  
@@ -41,17 +60,21 @@ The dataset includes multiple health and economic indicators for countries world
 
 ## Project Structure
 
-wealth-of-nations-analysis/  
-│  
-├── README.md  
-├── data/  
-│   └── worldbank_healthcare_data.csv  
-├── notebook/  
-│   └── explore_healthcare_vs_economy.ipynb  
-├── outputs/  
-│   └── gdp_life_expectancy_cleaned.csv  
-├── dashboard.py  
-└── requirements.txt  
+wealth-of-nations-analysis/
+├── README.md
+├── data/
+│   └── gdp_life_expectancy.csv
+├── notebook/
+│   └── explore_healthcare_vs_economy.ipynb
+├── outputs/
+│   └── gdp_life_expectancy_cleaned.csv
+├── librarian/
+│   ├── __init__.py
+│   ├── core.py
+│   ├── models.py
+│   └── utils.py
+├── dashboard.py
+└── requirements.txt
 
 ---
 
@@ -64,7 +87,7 @@ wealth-of-nations-analysis/
 2. **Data Cleaning**  
    - Remove rows with missing or invalid GDP or Life Expectancy values.  
    - Align datasets for valid country-year entries.  
-   - Implemented as a **function `clean_data()`** with docstring.
+   - Implemented as a **function `clean_gdp_life()`** with docstring.
 
 3. **Descriptive Statistics**  
    - Average, maximum, minimum GDP per capita.  
@@ -105,23 +128,20 @@ wealth-of-nations-analysis/
 
 ---
 
-## Future Directions
+# Tool used
 
-- Fit **regression models** to predict Life Expectancy from GDP and healthcare spending.  
-- Extend analysis to **income groups or regions**.  
-- Add **interactive filtering** and **time-series exploration** in Streamlit.  
-- Investigate **healthcare efficiency metrics** across countries.  
-- Expand dashboard to include other indicators such as **infant mortality** and **population trends**.--
+- Python 3.12
+- Libraries: matplotlib, numpy, pandas, streamlit
+- Jupyter Notebook for static exploration
+- Streamlit for interactive dashboard
+
 ---
 
-## How to Run 
+# Requirements
 
-1. Place the CSV dataset in the `data/` folder.  
-2. For notebook analysis: run `explore_healthcare_vs_economy.ipynb` sequentially.  
-3. For interactive dashboard: activate the virtual environment and run:
-
-```powershell
-.\venv_streamlit\Scripts\Activate.ps1
-streamlit run dashboard.py
+matplotlib==3.9.2
+numpy==2.1.1
+pandas==2.2.3
+streamlit==1.39.0
 
 ---
