@@ -4,130 +4,183 @@ Analyzes the relationship between GDP per capita, healthcare expenditure, and li
 Built with Streamlit.
 """
 
-import streamlit as st
-import pandas as pd
+from pathlib import Path
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+import streamlit as st
+
+# Reuse project package
+try:
+    from librarian.utils import load_data
+    from librarian.core import clean_gdp_life, compute_correlation
+    HAVE_LIBRARIAN = True
+except Exception:
+    HAVE_LIBRARIAN = False
 
 # --- PAGE SETUP ---
-st.set_page_config(page_title="Wealth of Nations Dashboard 🌍", layout="centered")
+st.set_page_config(page_title="Wealth of Nations Dashboard 🌍", layout="wide")
+st.title("🌍 Wealth of Nations — Health & Economy")
+st.caption("Interactive exploration of GDP per capita, healthcare spending, and life expectancy (World Bank data).")
 
-st.title("🌍 Wealth of Nations Dashboard")
-st.markdown("""
-This interactive dashboard explores the relationship between **GDP per capita**,  
-**Healthcare expenditure**, and **Life Expectancy** across countries using World Bank data.
-""")
+# --- PATHS ---
+PROJECT_ROOT = Path(__file__).resolve().parent
+DATA_PATH = PROJECT_ROOT / "data" / "worldbank_healthcare_data.csv"
 
-# --- LOAD DATA ---
+# --- LOAD DATA (cached) ---
 @st.cache_data
-def load_data(filepath: str) -> pd.DataFrame:
-    """Load data from a CSV file and return a DataFrame."""
+def load_df(path: Path) -> pd.DataFrame:
     try:
-        df = pd.read_csv(filepath)
-        st.success("✅ Data loaded successfully!")
+        if HAVE_LIBRARIAN:
+            # Use your reusable loader
+            df = load_data(str(path))
+        else:
+            df = pd.read_csv(path)
         return df
     except FileNotFoundError:
-        st.error("❌ File not found. Please place your CSV in the 'data/' folder.")
         return pd.DataFrame()
 
-data = load_data("data/worldbank_healthcare_data.csv")
+df_raw = load_df(DATA_PATH)
 
-# --- CHECK DATA ---
-if data.empty:
-    st.warning("⚠️ No data loaded. Please ensure your CSV file is available.")
+if df_raw.empty:
+    st.error("❌ Data not found. Make sure `data/worldbank_healthcare_data.csv` exists.")
     st.stop()
 
-st.subheader("📊 Data Preview")
-st.dataframe(data.head())
+st.success("✅ Data loaded")
+with st.expander("Preview data (first 10 rows)", expanded=False):
+    st.dataframe(df_raw.head(10), use_container_width=True)
 
 # --- CLEAN DATA ---
-def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Clean dataset: drop missing or invalid GDP and Life Expectancy rows."""
-    df = df.copy()
-    required_cols = ["gdp_per_capita", "life_expectancy"]
-    for col in required_cols:
-        if col not in df.columns:
-            st.error(f"Column '{col}' is missing in the dataset!")
-            return pd.DataFrame()
-        df[col] = pd.to_numeric(df[col], errors="coerce")
-    df = df.dropna(subset=required_cols)
-    df = df[(df["gdp_per_capita"] > 0) & (df["life_expectancy"] > 0)]
-    return df
+def clean_more(df: pd.DataFrame) -> pd.DataFrame:
+    """Coerce key numeric columns and drop invalids; reuse package if available."""
+    if HAVE_LIBRARIAN:
+        base = clean_gdp_life(df)  # ensures gdp_per_capita & life_expectancy numeric, drops NaNs
+    else:
+        base = df.copy()
+        for c in ["gdp_per_capita", "life_expectancy"]:
+            base[c] = pd.to_numeric(base.get(c), errors="coerce")
+        base = base.dropna(subset=["gdp_per_capita", "life_expectancy"])
+        base = base[(base["gdp_per_capita"] > 0) & (base["life_expectancy"] > 0)]
 
-data_clean = clean_data(data)
+    # Health spend & year optional
+    if "health_exp_gdp" in base.columns:
+        base["health_exp_gdp"] = pd.to_numeric(base["health_exp_gdp"], errors="coerce")
+    if "year" in base.columns:
+        base["year"] = pd.to_numeric(base["year"], errors="coerce").astype("Int64")
+    return base
 
-# --- REGION GROUPING ---
-regions = {
-    "Europe": ["France", "Germany", "Italy", "Spain", "United Kingdom", "Sweden", "Norway"],
-    "Asia": ["China", "Japan", "India", "South Korea", "Indonesia", "Thailand"],
-    "Africa": ["Nigeria", "Egypt", "South Africa", "Kenya", "Morocco"],
-    "Americas": ["United States", "Canada", "Brazil", "Mexico", "Argentina"],
-    "Oceania": ["Australia", "New Zealand"],
+df = clean_more(df_raw)
+
+# --- OPTIONAL REGION TAGGING (non-blocking) ---
+# Light mapping to avoid breaking if countries not in list
+REGIONS = {
+    "Europe": {"France","Germany","Italy","Spain","United Kingdom","Sweden","Norway"},
+    "Asia": {"China","Japan","India","South Korea","Indonesia","Thailand"},
+    "Africa": {"Nigeria","Egypt","South Africa","Kenya","Morocco"},
+    "Americas": {"United States","Canada","Brazil","Mexico","Argentina"},
+    "Oceania": {"Australia","New Zealand"},
 }
-
-def assign_region(country: str) -> str:
-    """Assign a region based on country name."""
-    for region, countries in regions.items():
-        if country in countries:
-            return region
+def to_region(country: str) -> str:
+    if not isinstance(country, str):
+        return "Other"
+    for r, names in REGIONS.items():
+        if country in names:
+            return r
     return "Other"
 
-if "country" in data_clean.columns:
-    data_clean["region"] = data_clean["country"].apply(assign_region)
+if "country" in df.columns:
+    df["region"] = df["country"].apply(to_region)
+
+# --- SIDEBAR FILTERS ---
+st.sidebar.header("Filters")
+
+# Year slider (if present)
+if "year" in df.columns and df["year"].notna().any():
+    years = sorted([int(y) for y in df["year"].dropna().unique()])
+    sel_year = st.sidebar.slider("Year", min_value=min(years), max_value=max(years), value=max(years), step=1)
+    df = df[df["year"] == sel_year]
+    st.caption(f"📅 Showing data for year **{sel_year}**")
 else:
-    data_clean["region"] = "Unknown"
+    st.caption("📅 Dataset has no `year` column; showing all rows.")
 
-# --- CORRELATION METRIC ---
-gdp = data_clean["gdp_per_capita"].to_numpy()
-life = data_clean["life_expectancy"].to_numpy()
+# Region filter (if present)
+if "region" in df.columns:
+    regions = ["All"] + sorted(df["region"].unique().tolist())
+    sel_region = st.sidebar.selectbox("Region", regions, index=0)
+    if sel_region != "All":
+        df = df[df["region"] == sel_region]
 
-if len(gdp) != len(life):
-    st.warning("⚠️ GDP and Life Expectancy arrays do not match in length.")
-    correlation = np.nan
+# Country search (optional quick filter)
+if "country" in df.columns:
+    q = st.sidebar.text_input("Search country (contains)")
+    if q:
+        df = df[df["country"].str.contains(q, case=False, na=False)]
+
+# --- CORRELATION (GDP vs Life) ---
+x = pd.to_numeric(df["gdp_per_capita"], errors="coerce").to_numpy()
+y = pd.to_numeric(df["life_expectancy"], errors="coerce").to_numpy()
+mask = ~np.isnan(x) & ~np.isnan(y)
+if mask.sum() >= 2:
+    r = compute_correlation(x[mask].tolist(), y[mask].tolist()) if HAVE_LIBRARIAN else float(np.corrcoef(x[mask], y[mask])[0, 1])
+    st.metric("📈 Correlation (GDP vs Life Expectancy)", f"{r:.3f}", help=f"Computed on n = {int(mask.sum())} observations")
 else:
-    correlation = np.corrcoef(gdp, life)[0, 1]
+    st.metric("📈 Correlation (GDP vs Life Expectancy)", "N/A", help="Not enough valid points")
 
-st.metric(label="📈 Correlation (GDP vs Life Expectancy)", value=f"{correlation:.3f}" if not np.isnan(correlation) else "N/A")
+# --- LAYOUT ---
+col1, col2 = st.columns(2, gap="large")
 
-# --- SIDEBAR REGION FILTER ---
-st.sidebar.header("Filter Options")
-selected_region = st.sidebar.selectbox(
-    "Select Region:",
-    options=["All"] + list(regions.keys())
-)
+# Plot 1: GDP vs Life (log x)
+with col1:
+    st.subheader("💰 GDP vs Life Expectancy")
+    fig, ax = plt.subplots(figsize=(6,4))
+    ax.scatter(x[mask], y[mask], alpha=0.6)
+    ax.set_xscale("log")
+    ax.set_xlabel("GDP per capita (US$, log scale)")
+    ax.set_ylabel("Life expectancy (years)")
+    title_suffix = ""
+    if "region" in df.columns:
+        title_suffix = f" — {sel_region}" if 'sel_region' in locals() and sel_region != "All" else ""
+    ax.set_title(f"GDP vs Life Expectancy{title_suffix}")
+    plt.tight_layout()
+    st.pyplot(fig)
 
-if selected_region != "All":
-    data_filtered = data_clean[data_clean["region"] == selected_region]
-else:
-    data_filtered = data_clean
+# Plot 2: Health spend vs Life (if available)
+with col2:
+    st.subheader("🏥 Health Expenditure vs Life Expectancy")
+    if "health_exp_gdp" in df.columns and df["health_exp_gdp"].notna().any():
+        hx = pd.to_numeric(df["health_exp_gdp"], errors="coerce").to_numpy()
+        mask2 = ~np.isnan(hx) & ~np.isnan(y)
+        if mask2.sum() >= 2:
+            r2 = compute_correlation(hx[mask2].tolist(), y[mask2].tolist()) if HAVE_LIBRARIAN else float(np.corrcoef(hx[mask2], y[mask2])[0, 1])
+            fig2, ax2 = plt.subplots(figsize=(6,4))
+            ax2.scatter(hx[mask2], y[mask2], alpha=0.6)
+            ax2.set_xlabel("Current health expenditure (% of GDP)")
+            ax2.set_ylabel("Life expectancy (years)")
+            ax2.set_title(f"Health Expenditure vs Life (r = {r2:.2f}, n = {int(mask2.sum())})")
+            plt.tight_layout()
+            st.pyplot(fig2)
+        else:
+            st.info("Not enough valid points to plot health expenditure vs life expectancy.")
+    else:
+        st.info("Column `health_exp_gdp` not found in dataset.")
 
-st.markdown(f"### Data for Region: {selected_region}")
-st.dataframe(data_filtered[["country", "gdp_per_capita", "life_expectancy"]].head())
+# Distribution (GDP)
+st.subheader("📊 GDP per Capita — Distribution")
+fig3, ax3 = plt.subplots(figsize=(8,3.8))
+pd.to_numeric(df["gdp_per_capita"], errors="coerce").plot(kind="hist", bins=30, edgecolor="black", ax=ax3)
+ax3.set_xlabel("GDP per capita (US$)")
+ax3.set_ylabel("Number of countries")
+plt.tight_layout()
+st.pyplot(fig3)
 
-# --- PLOTS ---
-st.subheader("💰 GDP vs Life Expectancy")
-fig, ax = plt.subplots()
-ax.scatter(data_filtered["gdp_per_capita"], data_filtered["life_expectancy"], alpha=0.6, color="teal")
-ax.set_xlabel("GDP per Capita (USD)")
-ax.set_ylabel("Life Expectancy (Years)")
-ax.set_title(f"GDP vs Life Expectancy ({selected_region})")
-st.pyplot(fig)
+# Summary table (compact)
+st.subheader("🔍 Summary Statistics (filtered)")
+show_cols = [c for c in ["country","region","year","gdp_per_capita","health_exp_gdp","life_expectancy"] if c in df.columns]
+st.dataframe(df[show_cols].head(20), use_container_width=True)
 
-st.subheader("📊 GDP Distribution")
-fig2, ax2 = plt.subplots()
-ax2.hist(data_filtered["gdp_per_capita"], bins=30, color="purple", alpha=0.7)
-ax2.set_xlabel("GDP per Capita (USD)")
-ax2.set_ylabel("Number of Countries")
-ax2.set_title(f"GDP Distribution ({selected_region})")
-st.pyplot(fig2)
-
-# --- SUMMARY STATISTICS ---
-st.markdown("### 🔍 Summary Statistics")
-st.write(data_filtered[["gdp_per_capita", "life_expectancy"]].describe())
+# Download filtered data
+csv_bytes = df.to_csv(index=False).encode("utf-8")
+st.download_button("⬇️ Download filtered data (CSV)", data=csv_bytes, file_name="wealth_health_filtered.csv", mime="text/csv")
 
 st.markdown("---")
-<<<<<<< HEAD
-st.markdown("Made with ❤️ by Giulia using Streamlit and Python 3.12")
-=======
-st.markdown("Made with ❤️ by Giulia using Streamlit and Python 3.12")
->>>>>>> 6ae6c72c33d1021de424402096c0a3220c8ad802
+st.markdown("Made with ❤️ by Giulia — Streamlit + Python 3.12")
