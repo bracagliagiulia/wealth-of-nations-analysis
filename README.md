@@ -167,8 +167,6 @@ This finding underscores the project’s focus: *the strength of a nation lies n
 python -m venv .venv
 # Windows PowerShell:
 .\.venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
 
 # 2) Install all required dependencies
 pip install -r requirements.txt
