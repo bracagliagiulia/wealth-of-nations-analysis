@@ -1,0 +1,4 @@
+pair,pearson_r,n
+gdp_per_capita vs life_expectancy,0.615,2309
+gdp_per_capita vs health_exp_gdp,0.315,1910
+life_expectancy vs health_exp_gdp,0.324,1910
