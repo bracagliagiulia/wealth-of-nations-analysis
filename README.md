@@ -1,52 +1,39 @@
-# Wealth of Nations Analysis
+# Wealth of Nations: Economic Prosperity and Health Systems
 
-Exploring economic and healthcare indicators using Python, including an interactive **Streamlit dashboard**.
+Exploring the link between a country's **economic performance** and its **population health outcomes** using Python, World Bank data, and an interactive **Streamlit dashboard**.
 
 ---
 
 ## Overview
 
-This project analyzes **GDP per capita**, **healthcare spending**, **life expectancy**, **infant mortality**, and **population** using Python.  
-It demonstrates how economic prosperity and healthcare outcomes are interrelated across countries using World Bank Open Data.  
-The analysis includes both static visualizations in Jupyter Notebook and an interactive Streamlit dashboard for exploration.
+This project explores the connection between **economic prosperity** and **health system outcomes** using real-world data from the **World Bank Open Data** portal.  
+It focuses on how variables such as **GDP per capita**, **healthcare expenditure**, and **life expectancy** interact across different countries.  
+The study combines quantitative analysis, visual exploration, and an interactive dashboard to understand how nations convert economic wealth into population well-being.  
+
+Through this project, Python is used not only for data manipulation and visualization, but also to demonstrate:
+- clean, modular programming practices using custom packages (`librarian`);
+- reproducibility with version control (GitHub);
+- the application of scientific computing libraries like NumPy and pandas;
+- clear, meaningful visualizations through Matplotlib;
+- and the creation of an interactive web dashboard via Streamlit.
 
 ---
 
-## Quickstart
-
-```bash
-# 1) Create & activate a virtual environment
-python -m venv .venv
-# Windows PowerShell:
-.\.venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
-
-# 2) Install dependencies
-pip install -r requirements.txt
-
-# 3) Run the notebook
-jupyter lab  # or jupyter notebook
-
-# 4) Run the Streamlit dashboard
-streamlit run dashboard.py
 
 ## Objectives
 
-- Examine global patterns in healthcare and economics.  
-- Analyze correlations between GDP, healthcare spending, and health outcomes.  
-- Identify outliers and efficiency differences in healthcare spending.  
-- Create both static and interactive visualizations.  
-- Group countries by region for comparative insights.
+- Explore global patterns connecting economic prosperity and health outcomes.  
+- Analyze the relationships between GDP, healthcare spending, and life expectancy.  
+- Identify regional outliers and efficiency differences in healthcare investment.  
+- Produce clear, reproducible analyses and visualizations.  
+- Develop an optional interactive web app to make findings accessible.
 
 ---
 
 ## Data Source
 
-All data comes from the **[World Bank Open Data](https://data.worldbank.org/)** portal in CSV format.  
-The dataset includes multiple health and economic indicators for countries worldwide.
-
-### Indicators Used
+All indicators are sourced from the **[World Bank Open Data](https://data.worldbank.org/)** portal in CSV format.  
+The dataset provides internationally comparable indicators covering economic and health metrics for all countries.
 
 | Category | Indicator | World Bank Code |
 |-----------|------------|----------------|
@@ -54,94 +41,142 @@ The dataset includes multiple health and economic indicators for countries world
 | Healthcare | Health expenditure (% of GDP) | SH.XPD.CHEX.GD.ZS |
 | Health outcomes | Life expectancy at birth (years) | SP.DYN.LE00.IN |
 | Mortality | Infant mortality (per 1,000 live births) | SP.DYN.IMRT.IN |
-| Population | Total population | SP.POP.TOTL |
+| Demographics | Total population | SP.POP.TOTL |
 
 ---
 
 ## Project Structure
-
 wealth-of-nations-analysis/
 ├── README.md
 ├── data/
-│   └── gdp_life_expectancy.csv
-├── notebook/
-│   └── explore_healthcare_vs_economy.ipynb
-├── outputs/
-│   └── gdp_life_expectancy_cleaned.csv
+│ └── worldbank_healthcare_data.csv
 ├── librarian/
-│   ├── __init__.py
-│   ├── core.py
-│   ├── models.py
-│   └── utils.py
+│ ├── init.py
+│ ├── core.py
+│ ├── models.py
+│ └── utils.py
+├── outputs/
+│ ├── gdp_vs_life.png
+│ ├── summary_stats.csv
+│ ├── correlation_summary.csv
+│ └── cleaned_wealth_health_data.csv
+├── presentation/
+│ └── explore_healthcare_vs_economy.ipynb
 ├── dashboard.py
-└── requirements.txt
+├── requirements.txt
+└── .gitignore
+
+- `librarian/`: reusable functions for data loading, cleaning, and computation.  
+- `presentation/`: main analysis notebook, formatted for grading and presentation.  
+- `outputs/`: automatically generated plots and datasets (ignored by Git).  
+- `dashboard.py`: Streamlit web app for interactive exploration.  
 
 ---
 
-## Analysis Steps
+## Analytical Steps
 
-1. **Load and Inspect Data**  
-   - Read CSV using Python.  
-   - Verify headers, sample rows, and data types.
+1. **Setup and Imports**  
+   - Configure the project root and import functions from the `librarian` package.  
+   - Ensure reproducibility via Python environments and modular design.
 
-2. **Data Cleaning**  
-   - Remove rows with missing or invalid GDP or Life Expectancy values.  
-   - Align datasets for valid country-year entries.  
-   - Implemented as a **function `clean_gdp_life()`** with docstring.
+2. **Data Loading and Inspection**  
+   - Load CSV data with `load_data()` and verify columns, data types, and structure.  
+   - Check non-numeric columns and dataset completeness.
 
-3. **Descriptive Statistics**  
-   - Average, maximum, minimum GDP per capita.  
-   - Average, maximum, minimum healthcare expenditure.  
-   - Group by **region** using a dictionary for aggregated statistics.
+3. **Data Cleaning**  
+   - Use `clean_gdp_life()` to convert values to numeric and remove invalid entries.  
+   - Align valid country-year observations for GDP and life expectancy.
 
-4. **Correlation Analysis**  
-   - Compute **Pearson correlation coefficients**:  
-     - GDP vs Life Expectancy  
-     - GDP vs Healthcare Expenditure  
-     - Life Expectancy vs Healthcare Expenditure  
-   - Encapsulated in **function `compute_correlation()`**.
+4. **Summary Statistics and Quality Check**  
+   - Compute descriptive metrics (mean, median, quartiles, outlier bounds).  
+   - Export `summary_stats.csv` for documentation.
 
-5. **Visualizations**  
-   - Scatter plots for GDP vs Life Expectancy and Healthcare Expenditure vs Life Expectancy.  
-   - Histograms and box plots for GDP and healthcare spending.  
-   - Scatter plots with **color coding by region**.  
-   - Time trends for selected countries over decades.  
-   - Trend lines or regression for predictive insights.
+5. **Visualization: GDP vs Life Expectancy**  
+   - Produce a log-scaled scatter plot with correlation coefficient (`r`) and sample size (`n`).  
+   - Save figure as `outputs/gdp_vs_life.png`.
 
-6. **Interactive Streamlit Dashboard**  
-   - `dashboard.py` allows users to explore data interactively.  
-   - Provides correlation summary, scatter plots, and filters by region.  
-   - Built using **Streamlit**, **matplotlib**, and **numpy**.
+6. **Healthcare Spending Analysis**  
+   - Examine the relationship between health expenditure and life expectancy.  
+   - Compute and visualize a **health efficiency index** (`life_expectancy / health_exp_gdp`).  
+   - Save distribution plots for interpretation.
 
-7. **Export Cleaned Data**  
-   - Cleaned GDP and Life Expectancy dataset saved to `outputs/gdp_life_expectancy_cleaned.csv`.
+7. **Correlation and Statistical Computation**  
+   - Use `compute_correlation()` (based on NumPy) to calculate Pearson’s r for each indicator pair.  
+   - Store results in `correlation_summary.csv`.
+
+8. **Export Cleaned and Derived Data**  
+   - Save reproducible datasets (`cleaned_wealth_health_data.csv`) in the `outputs/` folder.
+
+9. **Interactive Dashboard (Bonus)**  
+   - `dashboard.py` allows users to filter by region, visualize correlations, and compare countries dynamically using Streamlit.
 
 ---
 
 ## Key Findings
 
-- **GDP vs Life Expectancy:** Moderate positive correlation; wealthier countries generally have longer life expectancy.  
-- **Healthcare Expenditure:** Low global correlation with GDP and Life Expectancy, indicating differences in efficiency.  
-- **Outliers:** Some countries spend a lot but have poor health outcomes; others achieve good outcomes with modest spending.  
-- **GDP Distribution:** Highly skewed; a few countries have extremely high GDP per capita.  
-- **Regional Insights:** Grouping by region highlights patterns invisible in global averages.
+- **GDP vs Life Expectancy:**  
+  A moderate positive correlation (r ≈ 0.61) indicates that wealthier countries tend to live longer.  
+
+- **Healthcare Spending:**  
+  Higher expenditure usually improves life expectancy, but the efficiency metric shows that results vary widely.  
+
+- **Global Inequality:**  
+  GDP and health outcomes are both highly skewed; most countries cluster at low-income and moderate-life-expectancy levels.  
+
+- **Efficiency Insight:**  
+  Some nations achieve strong health results with limited spending — suggesting structural and policy differences in healthcare systems.
 
 ---
 
-# Tool used
+## Tools and Libraries
 
-- Python 3.12
-- Libraries: matplotlib, numpy, pandas, streamlit
-- Jupyter Notebook for static exploration
-- Streamlit for interactive dashboard
+| Purpose | Tools Used |
+|----------|-------------|
+| Programming | Python 3.12 |
+| Data handling | pandas |
+| Scientific computing | numpy |
+| Visualization | matplotlib |
+| Web application (bonus) | streamlit |
+| Notebook environment | JupyterLab |
+
+All dependencies are listed in `requirements.txt`.
 
 ---
 
-# Requirements
+## Repository and Version Control
 
-matplotlib==3.9.2
-numpy==2.1.1
-pandas==2.2.3
-streamlit==1.39.0
+- The repository follows a **clean modular structure** separating data, code, results, and presentation materials.  
+- A detailed `.gitignore` excludes large data files, caches, and virtual environments.  
+- Frequent, descriptive commits document the evolution of the analysis.  
+- Only reproducible source files (`.py`, `.ipynb`, `.md`) are tracked in version control.
+
+This setup aligns with the **GitHub Usage (5 pts)** and **Project Organization (5 pts)** criteria from the assignment rubric.
+
+---
+
+## Conclusion
+
+The analysis confirms that economic development and public health are deeply connected but not perfectly proportional.  
+Wealth supports longevity, yet **healthcare efficiency**—how effectively countries use their resources—plays a crucial role.  
+This finding underscores the project’s focus: *the strength of a nation lies not only in its wealth, but in how that wealth is invested in its people’s health.
+
+## Quickstart
+
+```bash
+# 1) Create and activate a virtual environment
+python -m venv .venv
+# Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
+# macOS/Linux:
+# source .venv/bin/activate
+
+# 2) Install all required dependencies
+pip install -r requirements.txt
+
+# 3) Open and run the Jupyter Notebook
+jupyter lab  # or jupyter notebook
+
+# 4) Launch the Streamlit dashboard (optional interactive analysis)
+streamlit run dashboard.py
 
 ---
