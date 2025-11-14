@@ -68,7 +68,7 @@ wealth-of-nations-analysis/
 
 - `librarian/`: reusable functions for data loading, cleaning, and computation.  
 - `presentation/`: main analysis notebook, formatted for grading and presentation.  
-- `outputs/`: automatically generated plots and datasets (ignored by Git).  
+- `outputs/`: automatically generated plots and datasets.  
 - `dashboard.py`: Streamlit web app for interactive exploration.  
 
 ---
@@ -149,8 +149,6 @@ All dependencies are listed in `requirements.txt`.
 - A detailed `.gitignore` excludes large data files, caches, and virtual environments.  
 - Frequent, descriptive commits document the evolution of the analysis.  
 - Only reproducible source files (`.py`, `.ipynb`, `.md`) are tracked in version control.
-
-This setup aligns with the **GitHub Usage (5 pts)** and **Project Organization (5 pts)** criteria from the assignment rubric.
 
 ---
 
